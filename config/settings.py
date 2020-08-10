@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'apps.common.apps.CommonConfig',
+    'apps.users.apps.UsersConfig',
 ]
 
 
