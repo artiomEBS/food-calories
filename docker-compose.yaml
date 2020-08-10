@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  web:
+    env_file:
+      - .env
+    build: .
+    restart: always
+    environment:
+      TZ: "Europe/Istanbul"
+    command: python manage.py runserver 0.0.0.0:7700
+    networks:
+      docker_network_food_calories:
+        ipv4_address: 172.25.1.1
+    volumes:
+      - .:/usr/app/
+    ports:
+      - 7700:7700
+
+networks:
+  docker_network_food_calories:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/16
