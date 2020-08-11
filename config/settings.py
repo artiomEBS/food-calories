@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'apps.common.apps.CommonConfig',
     'apps.users.apps.UsersConfig',
+    'apps.journal.apps.JournalConfig',
 ]
 
 MIDDLEWARE = [
