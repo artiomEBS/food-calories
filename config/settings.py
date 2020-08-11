@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "rest_framework",
+    "rest_framework_api_key",
     'corsheaders',
     'drf_yasg',
     'apps.common.apps.CommonConfig',
@@ -143,12 +145,20 @@ USE_L10N = True
 
 USE_TZ = True
 
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework_api_key.permissions.HasAPIKey",
+    ]
+}
+
+API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
+
 # Swagger
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'Token': {
             'type': 'apiKey',
-            'name': 'Authorization',
+            'name': 'X-Api-Key',
             'in': 'header'
         }
     }
