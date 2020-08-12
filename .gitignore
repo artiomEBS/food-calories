@@ -8,11 +8,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-static/admin/
-static/drf-yasg/
-static/doc/
-static/notifications/
-static/rest_framework/
 build/
 develop-eggs/
 dist/
@@ -100,17 +95,13 @@ ipython_config.py
 __pypackages__/
 
 # Celery stuff
-celerybeat-schedule.db
-celerybeat-schedule.bak
-celerybeat-schedule.dir
-celerybeat-schedule.dat
+celerybeat-schedule
 celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
 
 # Environments
-.idea
 .env
 .venv
 env/
@@ -118,6 +109,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.idea
+.vscode
 
 # Spyder project settings
 .spyderproject

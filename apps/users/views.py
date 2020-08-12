@@ -12,7 +12,9 @@ class GenerateApikey(APIView):
     permission_classes = (AllowAny,)
     serializer_class = UserSerializer
 
-    @swagger_auto_schema(request_body=UserCreateSerializer)
+    operation_post = "Create a user/profile and grant a new APIKey, returned with the response body once."
+
+    @swagger_auto_schema(request_body=UserCreateSerializer, operation_description=operation_post)
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
@@ -31,6 +33,9 @@ class ProfileListView(APIView):
     permission_classes = (HasAPIKey,)
     serializer_class = UserSerializer
 
+    operation_get = "Base overview of the user/profile/targets."
+
+    @swagger_auto_schema(operation_description=operation_get)
     def get(self, request):
         key = request.META['HTTP_X_API_KEY']
         api_key = UserAPIKey.objects.get_from_key(key)
