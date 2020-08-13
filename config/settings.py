@@ -149,20 +149,8 @@ USE_TZ = True
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework_api_key.permissions.HasAPIKey",
-    ]
-}
-
-API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
-
-# Swagger
-SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'Token': {
-            'type': 'apiKey',
-            'name': 'X-Api-Key',
-            'in': 'header'
-        }
-    }
+    ],
+    'EXCEPTION_HANDLER': 'apps.common.exceptions.custom_exception_handler'
 }
 
 # Static files (CSS, JavaScript, Images)
@@ -173,3 +161,39 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Token': {
+            'type': 'apiKey',
+            'name': 'X-Api-Key',
+            'in': 'header'
+        }
+    },
+    'TAGS_SORTER': 'alpha',
+    'OPERATIONS_SORTER': 'alpha',
+    'DOC_EXPANSION': 'list',
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False,
+        },
+    },
+}

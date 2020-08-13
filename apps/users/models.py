@@ -11,6 +11,11 @@ class UserAPIKey(AbstractAPIKey):
         verbose_name = "User APIKey"
         verbose_name_plural = "User APIKeys"
 
+    def revoke(self):
+        self.revoked = True
+        self.save()
+        return f"Current APIKey was revoked for the user {self.user.username}."
+
 
 class Profile(BaseModel):
     GENDER_CHOICES = (
