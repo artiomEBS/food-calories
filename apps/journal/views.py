@@ -146,7 +146,7 @@ class FoodJournalViewSet(viewsets.ModelViewSet):
         if not instance.is_valid():
             return Response(instance.errors)
 
-        instance.save(is_public=False, owner=request.user)
+        instance.save(owner=request.user)
         return Response(instance.data)
 
 
@@ -170,5 +170,5 @@ class ActivityJournalViewSet(viewsets.ModelViewSet):
         if not instance.is_valid():
             return Response(instance.errors)
 
-        instance.save(is_public=False, owner=request.user)
+        instance.save(owner=request.user)
         return Response(instance.data)
