@@ -14,4 +14,5 @@ urlpatterns = [
     re_path(r'user/profile/', views.DetailProfileView.as_view(), name='user_update_profile'),
     re_path(r'user/target/', views.DetailTargetView.as_view(), name='user_get_target'),
     re_path(r'user/target/', views.DetailTargetView.as_view(), name='user_update_target'),
+    re_path(r'user/recovery/', views.RecoverAccessView.as_view(), name='user_recover_access'),
 ]
