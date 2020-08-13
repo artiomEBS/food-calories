@@ -34,19 +34,20 @@ class APIKeyView(APIView):
         serializer = UserCreateSerializer(data=request.data)
 
         if serializer.is_valid():
-            username = serializer.validated_data['username']
+            username = serializer.validated_data["username"]
             new_user = User.objects.create(
                 username=username
             )
-            if '@' in username:
+            if "@" in username:
                 new_user.email = username
                 new_user.save()
             Profile.objects.create(user=new_user)
             Target.objects.create(user=new_user)
             api_key, key = UserAPIKey.objects.create_key(user=new_user, name="generic-user-apikey")
-            return Response(
-                f"Please store it somewhere safe: you will not be able to see it again. The APIkey is: {key}"
-            )
+            return Response({
+                "message": f"Please store it somewhere safe: you will not be able to see it again.",
+                "api_key": f"{key}"
+            })
         return Response(serializer.errors)
 
     @swagger_auto_schema(operation_description=operation_put)
@@ -54,9 +55,10 @@ class APIKeyView(APIView):
         api_key = get_api_key(request)
         revoke = api_key.revoke()
         api_key, key = UserAPIKey.objects.create_key(user=api_key.user, name="generic-user-apikey")
-        return Response(
-            f"{revoke} The new APIkey is: {key}"
-        )
+        return Response({
+            "message": f"{revoke}",
+            "api_key": f"{key}"
+        })
 
     @swagger_auto_schema(operation_description=operation_delete)
     def delete(self, request):
@@ -108,7 +110,7 @@ class DetailUserView(APIView):
         api_key.revoke()
         user.is_active = False
         user.save()
-        return Response("Your account has been diabled.")
+        return Response({"message": "Your account has been disabled."})
 
 
 class DetailProfileView(APIView):
@@ -172,12 +174,15 @@ class RecoverAccessView(APIView):
         serializer = UserRecoverSerializer(data=request.data)
 
         if serializer.is_valid():
-            username = serializer.validated_data['username']
+            username = serializer.validated_data["username"]
             user = User.objects.get(username=username)
             api_key, key = UserAPIKey.objects.create_key(user=user, name="recovered-user-apikey")
-            message = f"Please store it somewhere safe: you will not be able to see it again. The APIkey is: {key}"
+            text = f"Please store it somewhere safe: you will not be able to see it again. The APIkey is: {key}"
             if user.email:
-                mail_sender(user, message)
-                return Response("You will receive a new APIKey on your email shortly.")
-            return Response(message)
+                mail_sender(user, text)
+                return Response({"message": "You will receive a new APIKey on your email shortly."})
+            return Response({
+                "message": f"Please store it somewhere safe: you will not be able to see it again.",
+                "api_key": f"{key}"
+            })
         return Response(serializer.errors)
