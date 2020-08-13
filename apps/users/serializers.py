@@ -91,6 +91,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
         }
 
 
+class UserRecoverSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True, allow_blank=False)
+
+
 class UserFullSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer(required=False)
     target = TargetSerializer(required=False)

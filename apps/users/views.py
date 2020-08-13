@@ -12,11 +12,13 @@ from apps.users.serializers import (UserSerializer,
                                     SWAGGERProfilePUTSerializer,
                                     TargetSerializer,
                                     TargetPUTSerializer,
-                                    SWAGGERTargetPUTSerializer)
+                                    SWAGGERTargetPUTSerializer,
+                                    UserRecoverSerializer)
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
 from apps.common.apikey import get_api_key
+from apps.common.tasks import mail_sender
 
 
 class APIKeyView(APIView):
@@ -32,9 +34,13 @@ class APIKeyView(APIView):
         serializer = UserCreateSerializer(data=request.data)
 
         if serializer.is_valid():
+            username = serializer.validated_data['username']
             new_user = User.objects.create(
-                username=serializer.validated_data['username']
+                username=username
             )
+            if '@' in username:
+                new_user.email = username
+                new_user.save()
             Profile.objects.create(user=new_user)
             Target.objects.create(user=new_user)
             api_key, key = UserAPIKey.objects.create_key(user=new_user, name="generic-user-apikey")
@@ -153,3 +159,25 @@ class DetailTargetView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RecoverAccessView(APIView):
+    permission_classes = (AllowAny,)
+    serializer_class = UserRecoverSerializer
+
+    operation_post = "Recover user access, granting new APIKey."
+
+    @swagger_auto_schema(request_body=UserRecoverSerializer, operation_description=operation_post)
+    def post(self, request):
+        serializer = UserRecoverSerializer(data=request.data)
+
+        if serializer.is_valid():
+            username = serializer.validated_data['username']
+            user = User.objects.get(username=username)
+            api_key, key = UserAPIKey.objects.create_key(user=user, name="recovered-user-apikey")
+            message = f"Please store it somewhere safe: you will not be able to see it again. The APIkey is: {key}"
+            if user.email:
+                mail_sender(user, message)
+                return Response("You will receive a new APIKey on your email shortly.")
+            return Response(message)
+        return Response(serializer.errors)
