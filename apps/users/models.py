@@ -23,7 +23,7 @@ class Profile(BaseModel):
         ('F', 'Female')
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     height = models.IntegerField(null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)

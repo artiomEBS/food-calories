@@ -15,7 +15,4 @@ def custom_exception_handler(exc, context):
     if isinstance(exc, ObjectDoesNotExist):
         return Response(response, status=status.HTTP_404_NOT_FOUND)
 
-    if isinstance(exc, IntegrityError):
-        return Response(response, status=status.HTTP_409_CONFLICT)
-
     return response
