@@ -97,5 +97,5 @@ class ActivityJournalDetailSerializer(ModelSerializer):
 class ActivityJournalCreateSerializer(ModelSerializer):
     class Meta:
         model = models.ActivityCategory
-        exclude = ['owner', 'is_public', 'date_created', 'date_modified']
+        exclude = ['owner', 'is_public', 'rating', 'date_created', 'date_modified']
 
