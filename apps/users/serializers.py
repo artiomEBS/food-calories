@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+
 from apps.users.models import Profile, Target
 from rest_framework import serializers
 
@@ -16,9 +17,6 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer(required=False)
-    target = TargetSerializer(required=False)
-
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'username', 'password', 'profile', 'target')
@@ -33,5 +31,18 @@ class UserCreateSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username',)
         extra_kwargs = {
+            'password': {'required': False, 'allow_blank': True, 'write_only': True},
+        }
+
+
+class UserFullSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(required=False)
+    target = TargetSerializer(required=False)
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'username', 'password', 'profile', 'target')
+        extra_kwargs = {
+            'username': {'required': True, 'allow_blank': False},
             'password': {'required': False, 'allow_blank': True, 'write_only': True},
         }
