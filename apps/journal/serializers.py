@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework.serializers import *
+from rest_framework.serializers import ModelSerializer
 from apps.journal import models
 
 
@@ -23,8 +23,6 @@ class FoodPortionCreateSerializer(ModelSerializer):
 # FoodCategory
 
 class FoodCategoryDetailSerializer(ModelSerializer):
-    portions = FoodPortionDetailSerializer(many=True, read_only=True)
-
     class Meta:
         model = models.FoodCategory
         exclude = ['owner', 'is_public']
@@ -40,6 +38,7 @@ class FoodCategoryCreateSerializer(ModelSerializer):
 
 class FoodDetailSerializer(ModelSerializer):
     category = FoodCategoryDetailSerializer(read_only=True)
+    portions = FoodPortionDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Food
@@ -82,6 +81,8 @@ class ActivityCategoryCreateSerializer(ModelSerializer):
         exclude = ['owner', 'is_public', 'date_created', 'date_modified']
 
 
+# Activity
+
 class ActivityDetailSerializer(ModelSerializer):
     category = ActivityCategoryDetailSerializer(read_only=True)
 
@@ -95,6 +96,8 @@ class ActivityCreateSerializer(ModelSerializer):
         model = models.Activity
         exclude = ['owner', 'is_public', 'rating', 'date_created', 'date_modified']
 
+
+# ActivityJournal
 
 class ActivityJournalDetailSerializer(ModelSerializer):
     food = FoodDetailSerializer(read_only=True)

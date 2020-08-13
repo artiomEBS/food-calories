@@ -18,8 +18,6 @@ class FoodPortion(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicMode
 
 
 class FoodCategory(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicModel):
-    portions = models.ManyToManyField(related_name='Portions', to=FoodPortion)
-
     class Meta:
         ordering = ['title']
         verbose_name = 'Food category'
@@ -27,14 +25,24 @@ class FoodCategory(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicMod
 
 
 class Food(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicModel, RatedModel):
-    category = models.ForeignKey(related_name='Category', to=FoodCategory, on_delete=models.CASCADE)
-    energy = models.IntegerField('Energy (kcal)', default=0, validators=[positive_validator])
-    protein = models.FloatField('Protein (gr)', default=0.0, validators=[positive_validator])
-    carbohydrate = models.FloatField('Carbohydrate (gr)', default=0.0, validators=[positive_validator])
-    fat = models.FloatField('Fat (gr)', default=0.0, validators=[positive_validator])
-    fiber = models.FloatField('Fiber (gr)', default=0.0, validators=[positive_validator])
-    sugar = models.FloatField('Sugar (gr)', default=0.0, validators=[positive_validator])
-    salt = models.FloatField('Salt (gr)', default=0.0, validators=[positive_validator])
+    category = models.ForeignKey(
+        related_name='Category', to=FoodCategory, on_delete=models.CASCADE)
+    portions = models.ManyToManyField(
+        related_name='Portions', to=FoodPortion)
+    energy = models.IntegerField(
+        'Energy (kcal)', default=0, validators=[positive_validator])
+    protein = models.DecimalField(
+        'Protein (gr)', max_digits=19, decimal_places=4, default=0.0, validators=[positive_validator])
+    carbohydrate = models.DecimalField(
+        'Carbohydrate (gr)', max_digits=19, decimal_places=4, default=0.0, validators=[positive_validator])
+    fat = models.DecimalField(
+        'Fat (gr)', max_digits=19, decimal_places=4, default=0.0, validators=[positive_validator])
+    fiber = models.DecimalField(
+        'Fiber (gr)', max_digits=19, decimal_places=4, default=0.0, validators=[positive_validator])
+    sugar = models.DecimalField(
+        'Sugar (gr)', max_digits=19, decimal_places=4, default=0.0, validators=[positive_validator])
+    salt = models.DecimalField(
+        'Salt (gr)', max_digits=19, decimal_places=4, default=0.0, validators=[positive_validator])
 
     class Meta:
         ordering = ['title']
