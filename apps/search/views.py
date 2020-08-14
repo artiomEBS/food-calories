@@ -4,9 +4,10 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 
+from apps.common import pagination
+from apps.search import filtersets
 from apps.journal import models
 from apps.journal import serializers
-from apps.search import filtersets
 
 
 class SearchBaseViewSet(ListModelMixin, GenericViewSet):
@@ -36,10 +37,11 @@ class SearchFoodCategoryViewSet(SearchBaseViewSet):
 
 
 class SearchFoodViewSet(SearchBaseViewSet):
-    """ Search in foods. Queryset: user=request.user or is public=True"""
+    """ Search in foods. Paginated. Queryset: user=request.user or is public=True"""
     model = models.Food
     serializer_class = serializers.FoodDetailSerializer
     filterset_class = filtersets.FoodFilterSet
+    pagination_class = pagination.StandardPagination
 
 
 class SearchActivityCategoryViewSet(SearchBaseViewSet):
@@ -50,10 +52,11 @@ class SearchActivityCategoryViewSet(SearchBaseViewSet):
 
 
 class SearchActivityViewSet(SearchBaseViewSet):
-    """ Search in activities. Queryset: user=request.user or is public=True"""
+    """ Search in activities. Paginated. Queryset: user=request.user or is public=True"""
     model = models.Activity
     serializer_class = serializers.ActivityDetailSerializer
     filterset_class = filtersets.ActivityFilterSet
+    pagination_class = pagination.StandardPagination
 
 
 class SearchFoodJournalViewSet(SearchBaseViewSet):

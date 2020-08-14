@@ -121,4 +121,3 @@ class ActivityJournalFilterSet(FilterSet):
                 'exact', 'gte', 'lte',
             ],
         }
-
