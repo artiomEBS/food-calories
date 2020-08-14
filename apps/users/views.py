@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from apps.common.permissions import HasAPIKey
+from apps.journal.models import Activity, FoodJournal
 from apps.users.models import Profile, Target, UserAPIKey
 from apps.users.serializers import (UserSerializer,
                                     UserFullSerializer,
@@ -43,6 +44,8 @@ class APIKeyView(APIView):
                 new_user.save()
             Profile.objects.create(user=new_user)
             Target.objects.create(user=new_user)
+            Activity.objects.create(user=new_user)
+            FoodJournal.objects.create(user=new_user)
             api_key, key = UserAPIKey.objects.create_key(user=new_user, name="generic-user-apikey")
             return Response({
                 "message": f"Please store it somewhere safe: you will not be able to see it again.",
