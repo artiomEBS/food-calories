@@ -35,7 +35,7 @@ class DescribedModel(models.Model):
 
 
 class OwnedModel(models.Model):
-    owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    user = models.ForeignKey(to=User, null=True, blank=True, default=None, on_delete=models.SET_NULL)
 
     class Meta:
         abstract = True
