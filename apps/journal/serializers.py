@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, Serializer
 from apps.journal import models
 
 
@@ -100,7 +100,7 @@ class ActivityCreateSerializer(ModelSerializer):
 # ActivityJournal
 
 class ActivityJournalDetailSerializer(ModelSerializer):
-    food = FoodDetailSerializer(read_only=True)
+    activity = ActivityDetailSerializer(read_only=True)
 
     class Meta:
         model = models.ActivityJournal
@@ -111,3 +111,14 @@ class ActivityJournalCreateSerializer(ModelSerializer):
     class Meta:
         model = models.ActivityJournal
         exclude = ['user', 'date_created', 'date_modified']
+
+
+class JournalSerializer(Serializer):
+    food_journal = FoodJournalDetailSerializer(many=True, read_only=True)
+    activity_journal = ActivityJournalDetailSerializer(many=True, read_only=True)
+
+    def update(self, instance, validated_data):
+        return None
+
+    def create(self, validated_data):
+        return None
