@@ -6,169 +6,86 @@ from apps.journal import models
 from apps.journal import serializers
 
 
-class FoodPortionViewSet(viewsets.ModelViewSet):
+class BaseViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwner]
+    model = None
+    detail_serializer_class = None
+    create_serializer_class = None
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
-            return serializers.FoodPortionDetailSerializer
+            return self.detail_serializer_class
 
         if self.action in ('create', 'update', 'partial_update'):
-            return serializers.FoodPortionCreateSerializer
+            return self.create_serializer_class
 
     def get_queryset(self):
-        return models.FoodPortion.objects.filter(user=self.request.user)
+        return self.model.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()
-        instance = serializer(data=request.data)
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=request.data)
 
-        if not instance.is_valid():
-            return Response(instance.errors)
+        if not serializer.is_valid():
+            return Response(serializer.errors)
 
-        instance.save(is_public=False, user=request.user)
-        return Response(instance.data)
+        self.perform_create(serializer)
+        return Response(serializer.data)
 
-
-class FoodCategoryViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwner]
-
-    def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
-            return serializers.FoodCategoryDetailSerializer
-
-        if self.action in ('create', 'update', 'partial_update'):
-            return serializers.FoodCategoryCreateSerializer
-
-    def get_queryset(self):
-        return models.FoodCategory.objects.filter(user=self.request.user)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()
-        instance = serializer(data=request.data)
-
-        if not instance.is_valid():
-            return Response(instance.errors)
-
-        instance.save(is_public=False, user=request.user)
-        return Response(instance.data)
+    def perform_create(self, serializer):
+        serializer.save(is_public=False, user=self.request.user)
 
 
-class FoodViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwner]
-
-    def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
-            return serializers.FoodDetailSerializer
-
-        if self.action in ('create', 'update', 'partial_update'):
-            return serializers.FoodCreateSerializer
-
-    def get_queryset(self):
-        return models.Food.objects.filter(user=self.request.user)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()
-        instance = serializer(data=request.data)
-
-        if not instance.is_valid():
-            return Response(instance.errors)
-
-        instance.save(is_public=False, user=request.user)
-        return Response(instance.data)
+class FoodPortionViewSet(BaseViewSet):
+    """ CRUD on user's FoodPortions. Queryset: user=request.user """
+    model = models.FoodPortion
+    detail_serializer_class = serializers.FoodPortionDetailSerializer
+    create_serializer_class = serializers.FoodPortionCreateSerializer
 
 
-class ActivityCategoryViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwner]
-
-    def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
-            return serializers.ActivityCategoryDetailSerializer
-
-        if self.action in ('create', 'update', 'partial_update'):
-            return serializers.ActivityCategoryCreateSerializer
-
-    def get_queryset(self):
-        return models.ActivityCategory.objects.filter(user=self.request.user)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()
-        instance = serializer(data=request.data)
-
-        if not instance.is_valid():
-            return Response(instance.errors)
-
-        instance.save(is_public=False, user=request.user)
-        return Response(instance.data)
+class FoodCategoryViewSet(BaseViewSet):
+    """ CRUD on user's FoodCategories. Queryset: user=request.user """
+    model = models.FoodCategory
+    detail_serializer_class = serializers.FoodCategoryDetailSerializer
+    create_serializer_class = serializers.FoodCategoryCreateSerializer
 
 
-class ActivityViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwner]
-
-    def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
-            return serializers.ActivityDetailSerializer
-
-        if self.action in ('create', 'update', 'partial_update'):
-            return serializers.ActivityCreateSerializer
-
-    def get_queryset(self):
-        return models.Activity.objects.filter(user=self.request.user)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()
-        instance = serializer(data=request.data)
-
-        if not instance.is_valid():
-            return Response(instance.errors)
-
-        instance.save(is_public=False, user=request.user)
-        return Response(instance.data)
+class FoodViewSet(BaseViewSet):
+    """ CRUD on user's Foods. Queryset: user=request.user """
+    model = models.Food
+    detail_serializer_class = serializers.FoodDetailSerializer
+    create_serializer_class = serializers.FoodCreateSerializer
 
 
-class FoodJournalViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwner]
-
-    def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
-            return serializers.FoodJournalDetailSerializer
-
-        if self.action in ('create', 'update', 'partial_update'):
-            return serializers.FoodJournalCreateSerializer
-
-    def get_queryset(self):
-        return models.FoodJournal.objects.filter(user=self.request.user)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()
-        instance = serializer(data=request.data)
-
-        if not instance.is_valid():
-            return Response(instance.errors)
-
-        instance.save(user=request.user)
-        return Response(instance.data)
+class ActivityCategoryViewSet(BaseViewSet):
+    """ CRUD on user's ActivityCategories. Queryset: user=request.user """
+    model = models.ActivityCategory
+    detail_serializer_class = serializers.ActivityCategoryDetailSerializer
+    create_serializer_class = serializers.ActivityCategoryCreateSerializer
 
 
-class ActivityJournalViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwner]
+class ActivityViewSet(BaseViewSet):
+    """ CRUD on user's Activities. Queryset: user=request.user """
+    model = models.Activity
+    detail_serializer_class = serializers.ActivityDetailSerializer
+    create_serializer_class = serializers.ActivityCreateSerializer
 
-    def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
-            return serializers.ActivityJournalDetailSerializer
 
-        if self.action in ('create', 'update', 'partial_update'):
-            return serializers.ActivityJournalCreateSerializer
+class FoodJournalViewSet(BaseViewSet):
+    """ CRUD on user's FoodJournal. Queryset: user=request.user """
+    model = models.FoodJournal
+    detail_serializer_class = serializers.FoodJournalDetailSerializer
+    create_serializer_class = serializers.FoodJournalCreateSerializer
 
-    def get_queryset(self):
-        return models.ActivityJournal.objects.filter(user=self.request.user)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()
-        instance = serializer(data=request.data)
 
-        if not instance.is_valid():
-            return Response(instance.errors)
+class ActivityJournalViewSet(BaseViewSet):
+    """ CRUD on user's ActivityJournal. Queryset: user=request.user """
+    model = models.ActivityJournal
+    detail_serializer_class = serializers.ActivityJournalDetailSerializer
+    create_serializer_class = serializers.ActivityJournalCreateSerializer
 
-        instance.save(user=request.user)
-        return Response(instance.data)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
