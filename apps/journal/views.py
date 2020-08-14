@@ -1,13 +1,14 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from apps.common.permissions import IsOwner
+
+from apps.common.apikey import get_api_key
+from apps.common.permissions import IsOwner, HasAPIKey
 from apps.journal import models
 from apps.journal import serializers
 
 
 class BaseViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [HasAPIKey, IsOwner]
     model = None
     detail_serializer_class = None
     create_serializer_class = None
@@ -33,7 +34,8 @@ class BaseViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def perform_create(self, serializer):
-        serializer.save(is_public=False, user=self.request.user)
+        api_key = get_api_key(self.request)
+        serializer.save(is_public=False, user=api_key.user)
 
 
 class FoodPortionViewSet(BaseViewSet):

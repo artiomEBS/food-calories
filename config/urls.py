@@ -25,6 +25,5 @@ urlpatterns = [
     path('stuff/', include('apps.journal.urls'), name='journal'),
     path('search/', include('apps.search.urls'), name='search'),
     path('', include('apps.users.urls'), name='user'),
-    path('', include('apps.common.urls'), name='test'),
     path('', swagger_view, name='schema-swagger-ui'),
 ]
