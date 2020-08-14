@@ -1,10 +1,12 @@
 from django_filters import FilterSet
-from apps.journal import models
+
+from apps.calorie_api.models import FoodPortion, FoodCategory, Food, ActivityCategory, Activity
+from apps.journal.models import FoodJournal, ActivityJournal
 
 
 class FoodPortionFilterSet(FilterSet):
     class Meta:
-        model = models.FoodPortion
+        model = FoodPortion
         fields = {
             'id': [
                 'exact', 'in',
@@ -17,7 +19,7 @@ class FoodPortionFilterSet(FilterSet):
 
 class FoodCategoryFilterSet(FilterSet):
     class Meta:
-        model = models.FoodCategory
+        model = FoodCategory
         fields = {
             'id': [
                 'exact', 'in',
@@ -30,7 +32,7 @@ class FoodCategoryFilterSet(FilterSet):
 
 class FoodFilterSet(FilterSet):
     class Meta:
-        model = models.Food
+        model = Food
         fields = {
             'id': [
                 'exact', 'in',
@@ -70,7 +72,7 @@ class FoodFilterSet(FilterSet):
 
 class ActivityCategoryFilterSet(FilterSet):
     class Meta:
-        model = models.ActivityCategory
+        model = ActivityCategory
         fields = {
             'id': [
                 'exact', 'in',
@@ -83,7 +85,7 @@ class ActivityCategoryFilterSet(FilterSet):
 
 class ActivityFilterSet(FilterSet):
     class Meta:
-        model = models.Activity
+        model = Activity
         fields = {
             'id': [
                 'exact', 'in',
@@ -105,7 +107,7 @@ class ActivityFilterSet(FilterSet):
 
 class FoodJournalFilterSet(FilterSet):
     class Meta:
-        model = models.FoodJournal
+        model = FoodJournal
         fields = {
             'datetime': [
                 'exact', 'gte', 'lte',
@@ -115,7 +117,7 @@ class FoodJournalFilterSet(FilterSet):
 
 class ActivityJournalFilterSet(FilterSet):
     class Meta:
-        model = models.ActivityJournal
+        model = ActivityJournal
         fields = {
             'datetime': [
                 'exact', 'gte', 'lte',
