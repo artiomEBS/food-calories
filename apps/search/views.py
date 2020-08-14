@@ -4,10 +4,14 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 
+from apps.calorie_api.models import FoodPortion, FoodCategory, Food, ActivityCategory, Activity
+from apps.calorie_api.serializers import FoodPortionDetailSerializer, FoodCategoryDetailSerializer, \
+    FoodDetailSerializer, ActivityCategoryDetailSerializer, ActivityDetailSerializer
 from apps.common import pagination
+from apps.journal.models import FoodJournal, ActivityJournal
+from apps.journal.serializers import FoodJournalDetailSerializer, ActivityJournalDetailSerializer
 from apps.search import filtersets
-from apps.journal import models
-from apps.journal import serializers
+
 
 
 class SearchBaseViewSet(ListModelMixin, GenericViewSet):
@@ -24,45 +28,45 @@ class SearchBaseViewSet(ListModelMixin, GenericViewSet):
 
 class SearchFoodPortionViewSet(SearchBaseViewSet):
     """ Search in food portions. Queryset: user=request.user or is public=True"""
-    model = models.FoodPortion
-    serializer_class = serializers.FoodPortionDetailSerializer
+    model = FoodPortion
+    serializer_class = FoodPortionDetailSerializer
     filterset_class = filtersets.FoodPortionFilterSet
 
 
 class SearchFoodCategoryViewSet(SearchBaseViewSet):
     """ Search in food categories. Queryset: user=request.user or is public=True"""
-    model = models.FoodCategory
-    serializer_class = serializers.FoodCategoryDetailSerializer
+    model = FoodCategory
+    serializer_class = FoodCategoryDetailSerializer
     filterset_class = filtersets.FoodCategoryFilterSet
 
 
 class SearchFoodViewSet(SearchBaseViewSet):
     """ Search in foods. Paginated. Queryset: user=request.user or is public=True"""
-    model = models.Food
-    serializer_class = serializers.FoodDetailSerializer
+    model = Food
+    serializer_class = FoodDetailSerializer
     filterset_class = filtersets.FoodFilterSet
     pagination_class = pagination.StandardPagination
 
 
 class SearchActivityCategoryViewSet(SearchBaseViewSet):
     """ Search in activity categories. Queryset: user=request.user or is public=True"""
-    model = models.ActivityCategory
-    serializer_class = serializers.ActivityCategoryDetailSerializer
+    model = ActivityCategory
+    serializer_class = ActivityCategoryDetailSerializer
     filterset_class = filtersets.ActivityCategoryFilterSet
 
 
 class SearchActivityViewSet(SearchBaseViewSet):
     """ Search in activities. Paginated. Queryset: user=request.user or is public=True"""
-    model = models.Activity
-    serializer_class = serializers.ActivityDetailSerializer
+    model = Activity
+    serializer_class = ActivityDetailSerializer
     filterset_class = filtersets.ActivityFilterSet
     pagination_class = pagination.StandardPagination
 
 
 class SearchFoodJournalViewSet(SearchBaseViewSet):
     """ Search in food journal. Queryset: user=request.user """
-    model = models.FoodJournal
-    serializer_class = serializers.FoodJournalDetailSerializer
+    model = FoodJournal
+    serializer_class = FoodJournalDetailSerializer
     filterset_class = filtersets.FoodJournalFilterSet
 
     def get_queryset(self):
@@ -71,8 +75,8 @@ class SearchFoodJournalViewSet(SearchBaseViewSet):
 
 class SearchActivityJournalViewSet(SearchBaseViewSet):
     """ Search in activity journal. Queryset: user=request.user """
-    model = models.ActivityJournal
-    serializer_class = serializers.ActivityJournalDetailSerializer
+    model = ActivityJournal
+    serializer_class = ActivityJournalDetailSerializer
     filterset_class = filtersets.ActivityJournalFilterSet
 
     def get_queryset(self):
