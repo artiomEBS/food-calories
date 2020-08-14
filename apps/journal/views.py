@@ -17,7 +17,7 @@ class FoodPortionViewSet(viewsets.ModelViewSet):
             return serializers.FoodPortionCreateSerializer
 
     def get_queryset(self):
-        return models.FoodPortion.objects.filter(owner=self.request.user)
+        return models.FoodPortion.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()
@@ -26,7 +26,7 @@ class FoodPortionViewSet(viewsets.ModelViewSet):
         if not instance.is_valid():
             return Response(instance.errors)
 
-        instance.save(is_public=False, owner=request.user)
+        instance.save(is_public=False, user=request.user)
         return Response(instance.data)
 
 
@@ -41,7 +41,7 @@ class FoodCategoryViewSet(viewsets.ModelViewSet):
             return serializers.FoodCategoryCreateSerializer
 
     def get_queryset(self):
-        return models.FoodCategory.objects.filter(owner=self.request.user)
+        return models.FoodCategory.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()
@@ -50,7 +50,7 @@ class FoodCategoryViewSet(viewsets.ModelViewSet):
         if not instance.is_valid():
             return Response(instance.errors)
 
-        instance.save(is_public=False, owner=request.user)
+        instance.save(is_public=False, user=request.user)
         return Response(instance.data)
 
 
@@ -65,7 +65,7 @@ class FoodViewSet(viewsets.ModelViewSet):
             return serializers.FoodCreateSerializer
 
     def get_queryset(self):
-        return models.Food.objects.filter(owner=self.request.user)
+        return models.Food.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()
@@ -74,7 +74,7 @@ class FoodViewSet(viewsets.ModelViewSet):
         if not instance.is_valid():
             return Response(instance.errors)
 
-        instance.save(is_public=False, owner=request.user)
+        instance.save(is_public=False, user=request.user)
         return Response(instance.data)
 
 
@@ -89,7 +89,7 @@ class ActivityCategoryViewSet(viewsets.ModelViewSet):
             return serializers.ActivityCategoryCreateSerializer
 
     def get_queryset(self):
-        return models.ActivityCategory.objects.filter(owner=self.request.user)
+        return models.ActivityCategory.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()
@@ -98,7 +98,7 @@ class ActivityCategoryViewSet(viewsets.ModelViewSet):
         if not instance.is_valid():
             return Response(instance.errors)
 
-        instance.save(is_public=False, owner=request.user)
+        instance.save(is_public=False, user=request.user)
         return Response(instance.data)
 
 
@@ -113,7 +113,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
             return serializers.ActivityCreateSerializer
 
     def get_queryset(self):
-        return models.Activity.objects.filter(owner=self.request.user)
+        return models.Activity.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()
@@ -122,7 +122,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
         if not instance.is_valid():
             return Response(instance.errors)
 
-        instance.save(is_public=False, owner=request.user)
+        instance.save(is_public=False, user=request.user)
         return Response(instance.data)
 
 
@@ -137,7 +137,7 @@ class FoodJournalViewSet(viewsets.ModelViewSet):
             return serializers.FoodJournalCreateSerializer
 
     def get_queryset(self):
-        return models.FoodJournal.objects.filter(owner=self.request.user)
+        return models.FoodJournal.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()
@@ -146,7 +146,7 @@ class FoodJournalViewSet(viewsets.ModelViewSet):
         if not instance.is_valid():
             return Response(instance.errors)
 
-        instance.save(owner=request.user)
+        instance.save(user=request.user)
         return Response(instance.data)
 
 
@@ -161,7 +161,7 @@ class ActivityJournalViewSet(viewsets.ModelViewSet):
             return serializers.ActivityJournalCreateSerializer
 
     def get_queryset(self):
-        return models.ActivityJournal.objects.filter(owner=self.request.user)
+        return models.ActivityJournal.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()
@@ -170,5 +170,5 @@ class ActivityJournalViewSet(viewsets.ModelViewSet):
         if not instance.is_valid():
             return Response(instance.errors)
 
-        instance.save(owner=request.user)
+        instance.save(user=request.user)
         return Response(instance.data)
