@@ -4,7 +4,7 @@ from apps.journal import models
 
 
 @receiver(post_save, sender=models.FoodJournal)
-def good_increment_rating(sender, instance, **kwargs):
+def food_increment_rating(sender, instance, **kwargs):
     instance.food.rating += 1
     instance.food.save()
 
