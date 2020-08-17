@@ -7,7 +7,6 @@ router = DefaultRouter()
 router.register('food/category', views.FoodCategoryViewSet, basename='food-category')
 router.register('food/portion', views.FoodPortionViewSet, basename='food-portion')
 router.register('food', views.FoodViewSet, basename='food')
-router.register('activity/category', views.ActivityCategoryViewSet, basename='activity-category')
 router.register('activity', views.ActivityViewSet, basename='activity')
 
 urlpatterns = router.urls
