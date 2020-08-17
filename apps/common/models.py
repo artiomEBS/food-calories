@@ -18,7 +18,7 @@ class BaseModel(models.Model):
 
 
 class TitledModel(models.Model):
-    title = models.CharField('Title', max_length=128, blank=False, null=False, unique=True)
+    title = models.CharField('Title', max_length=128, blank=False, null=False, unique=False)
 
     def __str__(self):
         return self.title
@@ -42,7 +42,7 @@ class OwnedModel(models.Model):
 
 
 class PublicModel(models.Model):
-    is_public = models.BooleanField('Is public', default=False)
+    is_public = models.BooleanField('Is public', default=True)
 
     class Meta:
         abstract = True
