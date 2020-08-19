@@ -1,14 +1,14 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from apps.common.apikey import get_api_key
 from apps.common.permissions import IsOwner, HasAPIKey
 from apps.calorie_api import models
 from apps.calorie_api import serializers
+from rest_framework.permissions import IsAuthenticated
 
 
 class BaseViewSet(viewsets.ModelViewSet):
-    permission_classes = [HasAPIKey, IsOwner]
+    permission_classes = [IsAuthenticated, HasAPIKey, IsOwner]
     model = None
     detail_serializer_class = None
     create_serializer_class = None
@@ -21,6 +21,11 @@ class BaseViewSet(viewsets.ModelViewSet):
             return self.create_serializer_class
 
     def get_queryset(self):
+        # Fixture for swagger schema generation error
+        # TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object.
+        if self.request.user.id is None:
+            return self.model.objects.none()
+
         return self.model.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
@@ -34,9 +39,7 @@ class BaseViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def perform_create(self, serializer):
-        api_key = get_api_key(self.request)
-        serializer.save(is_public=False, user=api_key.user)
-
+        serializer.save(is_public=False, user=self.request.user)
 
 class FoodPortionViewSet(BaseViewSet):
     """ CRUD on user's FoodPortions. Queryset: user=request.user """

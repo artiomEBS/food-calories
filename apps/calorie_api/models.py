@@ -12,7 +12,6 @@ class FoodPortion(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicMode
     weight = models.IntegerField('Weight (gr)', default=100, validators=[positive_validator])
 
     class Meta:
-        ordering = ['title']
         verbose_name = 'Food portion'
         verbose_name_plural = 'Food portions'
 
@@ -21,7 +20,6 @@ class FoodCategory(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicMod
     uid = models.CharField(default=None, max_length=50, unique=True)
 
     class Meta:
-        ordering = ['title']
         verbose_name = 'Food category'
         verbose_name_plural = 'Food categories'
 
@@ -52,12 +50,20 @@ class Food(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicModel, Rate
         verbose_name_plural = 'Foods'
 
 
+class ActivityCategory(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicModel):
+    class Meta:
+        verbose_name = 'Activity category'
+        verbose_name_plural = 'Activity categories'
+
+
 class Activity(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicModel, RatedModel):
+    category = models.ForeignKey(
+        related_name='Category', to=ActivityCategory, blank=True, null=True, default=None, on_delete=models.SET_NULL
+    )
     uid = models.CharField(default=None, max_length=50, unique=True)
     energy = models.FloatField(
         'Energy (kcal/kg/min)', default=0.0, validators=[positive_validator])
 
     class Meta:
-        ordering = ['title']
         verbose_name = 'Activity'
         verbose_name_plural = 'Activities'

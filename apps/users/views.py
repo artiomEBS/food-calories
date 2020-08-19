@@ -17,17 +17,14 @@ from apps.users.serializers import (UserSerializer,
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
-from apps.common.apikey import get_api_key
 from apps.common.tasks import mail_sender
 
 
 class APIKeyView(APIView):
-    permission_classes = (AllowAny,)
     serializer_class = UserSerializer
+    permission_classes = (AllowAny,)
 
     operation_post = "Create a user/profile and grant a new APIKey, returned with the response body only a single time."
-    operation_put = "Revoke current APIKey and grant a new one."
-    operation_delete = "Revoke APIKey access to the current user."
 
     @swagger_auto_schema(request_body=UserCreateSerializer, operation_description=operation_post)
     def post(self, request):
@@ -50,11 +47,19 @@ class APIKeyView(APIView):
             })
         return Response(serializer.errors)
 
+
+class APIKeyDetailView(APIView):
+    serializer_class = UserSerializer
+    permission_classes = (HasAPIKey,)
+
+    operation_put = "Revoke current APIKey and grant a new one."
+    operation_delete = "Revoke APIKey access to the current user."
+
     @swagger_auto_schema(operation_description=operation_put)
     def put(self, request):
-        api_key = get_api_key(request)
+        api_key = request.apikey
         revoke = api_key.revoke()
-        api_key, key = UserAPIKey.objects.create_key(user=api_key.user, name="generic-user-apikey")
+        api_key, key = UserAPIKey.objects.create_key(user=request.user, name="generic-user-apikey")
         return Response({
             "message": f"{revoke}",
             "api_key": f"{key}"
@@ -62,7 +67,7 @@ class APIKeyView(APIView):
 
     @swagger_auto_schema(operation_description=operation_delete)
     def delete(self, request):
-        api_key = get_api_key(request)
+        api_key = request.apikey
         revoke = api_key.revoke()
         return Response(revoke)
 
@@ -75,8 +80,7 @@ class FullUserView(APIView):
 
     @swagger_auto_schema(operation_description=operation_get)
     def get(self, request):
-        api_key = get_api_key(request)
-        serializer = UserFullSerializer(api_key.user)
+        serializer = UserFullSerializer(request.user)
         return Response(serializer.data)
 
 
@@ -90,14 +94,12 @@ class DetailUserView(APIView):
 
     @swagger_auto_schema(operation_description=operation_get)
     def get(self, request):
-        api_key = get_api_key(request)
-        serializer = UserSerializer(api_key.user)
+        serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
     @swagger_auto_schema(request_body=UserPUTSerializer, operation_description=operation_put)
     def put(self, request):
-        api_key = get_api_key(request)
-        serializer = UserPUTSerializer(api_key.user, data=request.data)
+        serializer = UserPUTSerializer(request.user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -105,8 +107,8 @@ class DetailUserView(APIView):
 
     @swagger_auto_schema(operation_description=operation_delete)
     def delete(self, request):
-        api_key = get_api_key(request)
-        user = api_key.user
+        api_key = request.apikey
+        user = request.user
         api_key.revoke()
         user.is_active = False
         user.save()
@@ -122,15 +124,13 @@ class DetailProfileView(APIView):
 
     @swagger_auto_schema(operation_description=operation_get)
     def get(self, request):
-        api_key = get_api_key(request)
-        profile = Profile.objects.get(user=api_key.user)
+        profile = Profile.objects.get(user=request.user)
         serializer = ProfileSerializer(profile)
         return Response(serializer.data)
 
     @swagger_auto_schema(request_body=SWAGGERProfilePUTSerializer, qoperation_description=operation_put)
     def put(self, request):
-        api_key = get_api_key(request)
-        profile = Profile.objects.get(user=api_key.user)
+        profile = Profile.objects.get(user=request.user)
         serializer = ProfilePUTSerializer(profile, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -147,15 +147,13 @@ class DetailTargetView(APIView):
 
     @swagger_auto_schema(operation_description=operation_get)
     def get(self, request):
-        api_key = get_api_key(request)
-        target = Target.objects.get(user=api_key.user)
+        target = Target.objects.get(user=request.user)
         serializer = TargetSerializer(target)
         return Response(serializer.data)
 
     @swagger_auto_schema(request_body=SWAGGERTargetPUTSerializer, operation_description=operation_put)
     def put(self, request):
-        api_key = get_api_key(request)
-        target = Target.objects.get(user=api_key.user)
+        target = Target.objects.get(user=request.user)
         serializer = TargetPUTSerializer(target, data=request.data)
         if serializer.is_valid():
             serializer.save()
