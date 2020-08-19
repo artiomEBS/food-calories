@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework.serializers import ModelSerializer, Serializer
+from rest_framework.serializers import ModelSerializer
 
 from apps.calorie_api.serializers import ActivityDetailSerializer, FoodDetailSerializer
 from apps.journal import models
