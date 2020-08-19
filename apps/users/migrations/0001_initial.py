@@ -61,6 +61,7 @@ class Migration(migrations.Migration):
                 ('gender', models.CharField(choices=[('M', 'Male'), ('F', 'Female')], max_length=1)),
                 ('height', models.IntegerField(blank=True, null=True)),
                 ('weight', models.IntegerField(blank=True, null=True)),
+                ('testNameModels', models.IntegerField(blank=True, null=True)),
                 ('date_of_birth', models.DateField(blank=True, null=True)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
