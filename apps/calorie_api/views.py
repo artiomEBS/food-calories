@@ -1,15 +1,14 @@
-from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 
 from apps.common.permissions import IsOwner, HasAPIKey
 from apps.calorie_api import models
 from apps.calorie_api import serializers
+from rest_framework.permissions import IsAuthenticated
 
 
 class BaseViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwner, HasAPIKey]
+    permission_classes = [IsAuthenticated, HasAPIKey, IsOwner]
     model = None
     detail_serializer_class = None
     create_serializer_class = None
@@ -41,7 +40,6 @@ class BaseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(is_public=False, user=self.request.user)
-
 
 class FoodPortionViewSet(BaseViewSet):
     """ CRUD on user's FoodPortions. Queryset: user=request.user """

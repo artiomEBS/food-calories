@@ -14,6 +14,12 @@ from dotenv import load_dotenv
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+# Https turn ON/OFF
+os.environ['HTTPS'] = "on"
+os.environ['wsgi.url_scheme'] = 'https'
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "https")
+
 load_dotenv(verbose=DEBUG)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
