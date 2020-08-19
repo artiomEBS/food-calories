@@ -25,13 +25,13 @@ class FoodPortionCreateSerializer(ModelSerializer):
 class FoodCategoryDetailSerializer(ModelSerializer):
     class Meta:
         model = models.FoodCategory
-        exclude = ['user', 'is_public']
+        exclude = ['uid', 'user', 'is_public']
 
 
 class FoodCategoryCreateSerializer(ModelSerializer):
     class Meta:
         model = models.FoodCategory
-        exclude = ['user', 'is_public', 'date_created', 'date_modified']
+        exclude = ['uid', 'user', 'is_public', 'date_created', 'date_modified']
 
 
 # Food
@@ -42,13 +42,13 @@ class FoodDetailSerializer(ModelSerializer):
 
     class Meta:
         model = models.Food
-        exclude = ['user', 'is_public']
+        exclude = ['uid', 'user', 'is_public']
 
 
 class FoodCreateSerializer(ModelSerializer):
     class Meta:
         model = models.Food
-        exclude = ['user', 'is_public', 'rating', 'date_created', 'date_modified']
+        exclude = ['uid', 'user', 'is_public', 'rating', 'date_created', 'date_modified']
 
 
 # Activity
@@ -56,10 +56,10 @@ class FoodCreateSerializer(ModelSerializer):
 class ActivityDetailSerializer(ModelSerializer):
     class Meta:
         model = models.Activity
-        exclude = ['user', 'is_public']
+        exclude = ['uid', 'user', 'is_public']
 
 
 class ActivityCreateSerializer(ModelSerializer):
     class Meta:
         model = models.Activity
-        exclude = ['user', 'is_public', 'rating', 'date_created', 'date_modified']
+        exclude = ['uid', 'user', 'is_public', 'rating', 'date_created', 'date_modified']
