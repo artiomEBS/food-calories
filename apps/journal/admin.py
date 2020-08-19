@@ -6,6 +6,7 @@ from apps.journal import models
 class FoodJournalAdmin(admin.ModelAdmin):
     list_display = ['id', 'food', 'weight', 'datetime', 'user', 'date_created', 'date_modified']
     fields = ['food', 'weight', 'datetime', 'user']
+    autocomplete_fields = ['food']
 
 
 @admin.register(models.ActivityJournal)
