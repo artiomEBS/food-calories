@@ -1,15 +1,18 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.utils.timezone import now
 
 from apps.calorie_api.models import Activity, Food
-from apps.common.models import BaseModel, TitledModel, DescribedModel, OwnedModel, PublicModel, RatedModel
+from apps.common.models import BaseModel
 
 
+User = get_user_model()
 positive_validator = MinValueValidator(limit_value=0)
 
 
-class FoodJournal(BaseModel, OwnedModel):
+class FoodJournal(BaseModel):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     food = models.ForeignKey(to=Food, on_delete=models.CASCADE)
     weight = models.IntegerField('Weight (gr)', validators=[positive_validator])
     datetime = models.DateTimeField('Datetime', default=now)
@@ -22,7 +25,8 @@ class FoodJournal(BaseModel, OwnedModel):
         verbose_name_plural = 'Food journal'
 
 
-class ActivityJournal(BaseModel, OwnedModel):
+class ActivityJournal(BaseModel):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     activity = models.ForeignKey(to=Activity, on_delete=models.CASCADE)
     duration = models.IntegerField('Duration (min)', validators=[positive_validator])
     datetime = models.DateTimeField('Datetime', default=now)

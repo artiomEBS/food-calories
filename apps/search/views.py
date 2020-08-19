@@ -13,7 +13,6 @@ from apps.journal.serializers import FoodJournalDetailSerializer, ActivityJourna
 from apps.search import filtersets
 
 
-
 class SearchBaseViewSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
