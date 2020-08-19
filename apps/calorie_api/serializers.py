@@ -51,7 +51,6 @@ class FoodCreateSerializer(ModelSerializer):
         exclude = ['user', 'is_public', 'rating', 'date_created', 'date_modified']
 
 
-
 # ActivityCategory
 
 class ActivityCategoryDetailSerializer(ModelSerializer):

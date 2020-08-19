@@ -12,14 +12,12 @@ class FoodPortion(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicMode
     weight = models.IntegerField('Weight (gr)', default=100, validators=[positive_validator])
 
     class Meta:
-        ordering = ['title']
         verbose_name = 'Food portion'
         verbose_name_plural = 'Food portions'
 
 
 class FoodCategory(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicModel):
     class Meta:
-        ordering = ['title']
         verbose_name = 'Food category'
         verbose_name_plural = 'Food categories'
 
@@ -62,6 +60,5 @@ class Activity(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicModel, 
         'Energy (kcal/kg/min)', default=0, validators=[positive_validator])
 
     class Meta:
-        ordering = ['title']
         verbose_name = 'Activity'
         verbose_name_plural = 'Activities'

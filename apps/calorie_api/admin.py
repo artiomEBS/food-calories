@@ -60,7 +60,6 @@ class FoodAdmin(admin.ModelAdmin):
     ]
 
 
-
 @admin.register(models.ActivityCategory)
 class ActivityCategoryAdmin(admin.ModelAdmin):
     list_display = ('title', 'user', 'is_public', 'date_created', 'date_modified',)

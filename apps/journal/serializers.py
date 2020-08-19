@@ -8,7 +8,6 @@ from apps.journal import models
 User = get_user_model()
 
 
-
 # FoodJournal
 
 class FoodJournalDetailSerializer(ModelSerializer):
@@ -23,9 +22,6 @@ class FoodJournalCreateSerializer(ModelSerializer):
     class Meta:
         model = models.FoodJournal
         exclude = ['user', 'date_created', 'date_modified']
-
-
-
 
 
 # ActivityJournal
