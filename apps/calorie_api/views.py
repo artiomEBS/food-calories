@@ -59,13 +59,6 @@ class FoodViewSet(BaseViewSet):
     create_serializer_class = serializers.FoodCreateSerializer
 
 
-class ActivityCategoryViewSet(BaseViewSet):
-    """ CRUD on user's ActivityCategories. Queryset: user=request.user """
-    model = models.ActivityCategory
-    detail_serializer_class = serializers.ActivityCategoryDetailSerializer
-    create_serializer_class = serializers.ActivityCategoryCreateSerializer
-
-
 class ActivityViewSet(BaseViewSet):
     """ CRUD on user's Activities. Queryset: user=request.user """
     model = models.Activity

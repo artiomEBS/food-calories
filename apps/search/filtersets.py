@@ -1,6 +1,6 @@
 from django_filters import FilterSet
 
-from apps.calorie_api.models import FoodPortion, FoodCategory, Food, ActivityCategory, Activity
+from apps.calorie_api.models import FoodPortion, FoodCategory, Food, Activity
 from apps.journal.models import FoodJournal, ActivityJournal
 
 
@@ -70,19 +70,6 @@ class FoodFilterSet(FilterSet):
         }
 
 
-class ActivityCategoryFilterSet(FilterSet):
-    class Meta:
-        model = ActivityCategory
-        fields = {
-            'id': [
-                'exact', 'in',
-            ],
-            'title': [
-                'exact', 'contains',
-            ],
-        }
-
-
 class ActivityFilterSet(FilterSet):
     class Meta:
         model = Activity
@@ -91,12 +78,6 @@ class ActivityFilterSet(FilterSet):
                 'exact', 'in',
             ],
             'title': [
-                'exact', 'contains',
-            ],
-            'category__id': [
-                'exact', 'in',
-            ],
-            'category__title': [
                 'exact', 'contains',
             ],
             'energy': [

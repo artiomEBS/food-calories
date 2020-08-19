@@ -4,9 +4,9 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 
-from apps.calorie_api.models import FoodPortion, FoodCategory, Food, ActivityCategory, Activity
+from apps.calorie_api.models import FoodPortion, FoodCategory, Food, Activity
 from apps.calorie_api.serializers import FoodPortionDetailSerializer, FoodCategoryDetailSerializer, \
-    FoodDetailSerializer, ActivityCategoryDetailSerializer, ActivityDetailSerializer
+    FoodDetailSerializer, ActivityDetailSerializer
 from apps.common import pagination
 from apps.journal.models import FoodJournal, ActivityJournal
 from apps.journal.serializers import FoodJournalDetailSerializer, ActivityJournalDetailSerializer
@@ -45,13 +45,6 @@ class SearchFoodViewSet(SearchBaseViewSet):
     serializer_class = FoodDetailSerializer
     filterset_class = filtersets.FoodFilterSet
     pagination_class = pagination.StandardPagination
-
-
-class SearchActivityCategoryViewSet(SearchBaseViewSet):
-    """ Search in activity categories. Queryset: user=request.user or is public=True"""
-    model = ActivityCategory
-    serializer_class = ActivityCategoryDetailSerializer
-    filterset_class = filtersets.ActivityCategoryFilterSet
 
 
 class SearchActivityViewSet(SearchBaseViewSet):
