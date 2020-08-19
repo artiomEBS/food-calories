@@ -63,10 +63,10 @@ class FoodAdmin(admin.ModelAdmin):
 
 @admin.register(models.Activity)
 class Activity(admin.ModelAdmin):
-    list_display = ['id', 'uid', 'title', 'energy', 'user', 'is_public', 'date_created', 'date_modified']
+    list_display = ['id', 'uid', 'title', 'category', 'energy', 'user', 'is_public', 'date_created', 'date_modified']
     fieldsets = [
         (None, {
-            'fields': ('uid', 'title',),
+            'fields': ('uid', 'category', 'title',),
         }),
         ('Nutrition', {
             'fields': ('energy',),
@@ -82,3 +82,19 @@ class Activity(admin.ModelAdmin):
         }),
     ]
     search_fields = ('uid', 'title',)
+
+
+@admin.register(models.ActivityCategory)
+class ActivityCategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'user', 'is_public', 'date_created', 'date_modified',)
+    fieldsets = [
+        (None, {
+            'fields': ('title',),
+        }),
+        ('Published', {
+            'fields': ('user', 'is_public',),
+        }),
+        ('Optional', {
+            'fields': ('description',),
+        })
+    ]

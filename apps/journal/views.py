@@ -1,7 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from apps.common.apikey import get_api_key
 from apps.common.permissions import IsOwner, HasAPIKey
 from apps.journal import models
 from apps.journal import serializers
@@ -34,7 +33,7 @@ class BaseViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def perform_create(self, serializer):
-        api_key = get_api_key(self.request)
+        api_key = self.request.apikey
         serializer.save(is_public=False, user=api_key.user)
 
 
