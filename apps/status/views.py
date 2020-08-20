@@ -9,7 +9,6 @@ from apps.users.models import Profile
 
 
 
-
 class StatusView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = StatusSerializer

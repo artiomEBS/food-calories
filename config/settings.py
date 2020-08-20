@@ -16,9 +16,9 @@ from dotenv import load_dotenv
 DEBUG = True
 
 # Https turn ON/OFF
-os.environ['HTTPS'] = "on"
-os.environ['wsgi.url_scheme'] = 'https'
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "https")
+os.environ['HTTPS'] = "off"
+os.environ['wsgi.url_scheme'] = 'http'
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "http")
 
 load_dotenv(verbose=DEBUG)
 
