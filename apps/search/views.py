@@ -21,11 +21,6 @@ class SearchBaseViewSet(ListModelMixin, GenericViewSet):
     filterset_class = None
 
     def get_queryset(self):
-        # Fixture for swagger schema generation error
-        # TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object.
-        if self.request.user.id is None:
-            return self.model.objects.none()
-
         query = Q(is_public=True) | Q(user=self.request.user.id)
         return self.model.objects.filter(query)
 
@@ -67,12 +62,7 @@ class SearchFoodJournalViewSet(SearchBaseViewSet):
     filterset_class = filtersets.FoodJournalFilterSet
 
     def get_queryset(self):
-        # Fixture for swagger schema generation error
-        # TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object.
-        if self.request.user.id is None:
-            return self.model.objects.none()
-
-        return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.filter(user=self.request.user.id)
 
 
 class SearchActivityJournalViewSet(SearchBaseViewSet):
@@ -82,9 +72,4 @@ class SearchActivityJournalViewSet(SearchBaseViewSet):
     filterset_class = filtersets.ActivityJournalFilterSet
 
     def get_queryset(self):
-        # Fixture for swagger schema generation error
-        # TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object.
-        if self.request.user.id is None:
-            return self.model.objects.none()
-
-        return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.filter(user=self.request.user.id)

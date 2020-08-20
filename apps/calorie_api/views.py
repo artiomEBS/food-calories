@@ -1,3 +1,5 @@
+from django.db.models import Q
+
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -21,12 +23,7 @@ class BaseViewSet(viewsets.ModelViewSet):
             return self.create_serializer_class
 
     def get_queryset(self):
-        # Fixture for swagger schema generation error
-        # TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object.
-        if self.request.user.id is None:
-            return self.model.objects.none()
-
-        return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.filter(user=self.request.user.id)
 
     def create(self, request, *args, **kwargs):
         serializer_class = self.get_serializer_class()
@@ -40,6 +37,7 @@ class BaseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(is_public=False, user=self.request.user)
+
 
 class FoodPortionViewSet(BaseViewSet):
     """ CRUD on user's FoodPortions. Queryset: user=request.user """

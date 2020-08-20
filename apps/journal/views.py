@@ -21,7 +21,7 @@ class BaseViewSet(viewsets.ModelViewSet):
             return self.create_serializer_class
 
     def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.filter(user=self.request.user.id)
 
     def create(self, request, *args, **kwargs):
         serializer_class = self.get_serializer_class()
