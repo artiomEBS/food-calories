@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'apps.calorie_api.apps.CalorieApiConfig',
     'apps.journal.apps.JournalConfig',
     'apps.search.apps.SearchConfig',
+    'apps.status.apps.StatusConfig',
 ]
 
 MIDDLEWARE = [
