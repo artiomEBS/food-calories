@@ -14,6 +14,7 @@ from rest_framework.mixins import (
 )
 
 from apps.common.permissions import IsOwner, HasAPIKey
+from apps.common.authentication import CsrfExemptSessionAuthentication, BasicAuthentication
 
 
 class BaseViewSet(ListModelMixin, CreateModelMixin, RetrieveModelMixin,
@@ -22,6 +23,7 @@ class BaseViewSet(ListModelMixin, CreateModelMixin, RetrieveModelMixin,
     model = None
     detail_serializer_class = None
     create_serializer_class = None
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
