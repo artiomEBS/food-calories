@@ -45,7 +45,7 @@ class APIKeyView(APIView):
                 "message": f"Please store it somewhere safe: you will not be able to see it again.",
                 "api_key": f"{key}"
             })
-        return Response(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
 
 
 class APIKeyDetailView(APIView):
