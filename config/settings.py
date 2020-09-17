@@ -16,9 +16,9 @@ from dotenv import load_dotenv
 DEBUG = True
 
 # Https turn ON/OFF
-os.environ['HTTPS'] = "off"
-os.environ['wsgi.url_scheme'] = 'http'
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "http")
+# os.environ['HTTPS'] = "off"
+# os.environ['wsgi.url_scheme'] = 'http'
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "http")
 
 load_dotenv(verbose=DEBUG)
 
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'apps.calorie_api.apps.CalorieApiConfig',
     'apps.journal.apps.JournalConfig',
     'apps.search.apps.SearchConfig',
+    'apps.diary',
 ]
 
 MIDDLEWARE = [
