@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils.timezone import now
@@ -17,7 +19,7 @@ class FoodPortion(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicMode
 
 
 class FoodCategory(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicModel):
-    uid = models.CharField(default=None, max_length=50, unique=True)
+    uid = models.CharField(default=uuid.uuid4, max_length=50, unique=True)
 
     class Meta:
         verbose_name = 'Food category'
@@ -25,7 +27,7 @@ class FoodCategory(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicMod
 
 
 class Food(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicModel, RatedModel):
-    uid = models.CharField(default=None, max_length=50, unique=True)
+    uid = models.CharField(default=uuid.uuid4, max_length=50, unique=True)
     category = models.ForeignKey(
         related_name='Category', to=FoodCategory, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     portions = models.ManyToManyField(
@@ -60,7 +62,7 @@ class Activity(BaseModel, TitledModel, DescribedModel, OwnedModel, PublicModel, 
     category = models.ForeignKey(
         related_name='Category', to=ActivityCategory, blank=True, null=True, default=None, on_delete=models.SET_NULL
     )
-    uid = models.CharField(default=None, max_length=50, unique=True)
+    uid = models.CharField(default=uuid.uuid4, max_length=50, unique=True)
     energy = models.FloatField(
         'Energy (kcal/kg/min)', default=0.0, validators=[positive_validator])
 

@@ -1,76 +1,81 @@
 from datetime import date
-from apps.status.serializers import StatusSerializer
-from rest_framework.views import APIView
+
 from rest_framework.response import Response
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
-from apps.journal import models
+
+from apps.status.serializers import StatusSerializer
 from apps.journal.models import FoodJournal, ActivityJournal
 from apps.users.models import Profile
 
 
-
-class StatusView(APIView):
+class StatusView(GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = StatusSerializer
 
     def get(self, request):
-        user_profile = Profile.objects.filter(user=request.user).first()
-        user_weight = Profile.weight
+        # noqa - cautam in jurnal tot ce a mincat azi userul
+        food_journal_list_today = FoodJournal.objects.filter(
+            user=self.request.user.id,
+            datetime__date=date.today(),
+        )
 
-        food_journal_queryset = FoodJournal.objects.filter(user=request.user, datetime__date=date.today())
-        activity_journal_queryset = ActivityJournal.objects.filter(user=request.user, datetime__date=date.today())
+        # noqa - Calculam suma totala a nutrientilor consumati stazi
+        today_energy = 0
+        today_protein = 0
+        today_carbohydrate = 0
+        today_fat = 0
+        today_fiber = 0
+        today_sugar = 0
+        today_salt = 0
+        for food_journal in food_journal_list_today:
+            today_energy += food_journal.food.energy * food_journal.weight
+            today_protein += food_journal.food.protein * food_journal.weight
+            today_carbohydrate += food_journal.food.carbohydrate * food_journal.weight
+            today_fat += food_journal.food.fat * food_journal.weight
+            today_fiber += food_journal.food.fiber * food_journal.weight
+            today_sugar += food_journal.food.sugar * food_journal.weight
+            today_salt += food_journal.food.salt * food_journal.weight
 
-        energy_today = 0
-        protein_today = 0
-        carbohydrate_today = 0
-        fat_today = 0
-        fiber_today = 0
-        sugar_today = 0
-        salt_today = 0
-        energy_use = 0
 
-        for food_journal in food_journal_queryset:
-            energy_today += food_journal.food.energy * food_journal.weight
-            protein_today += food_journal.food.protein * food_journal.weight
-            carbohydrate_today = food_journal.food.carbohydrate * food_journal.weight
-            fat_today = food_journal.food.fat * food_journal.weight
-            fiber_today = food_journal.food.fiber * food_journal.weight
-            sugar_today = food_journal.food.sugar * food_journal.weight
-            salt_today = food_journal.food.salt * food_journal.weight
+        # noqa - Cautam profilul utilizatorului pentru a scoate din el greutatea utilizatorului
+        user_profile = Profile.objects.filter(user=self.request.user.id).first()
 
-        for activity_journal in activity_journal_queryset:
-            energy_use += activity_journal.duration * Profile.weight * energy_today
+        if user_profile is None:
+            return Response("User doesn't have a profile", status=404)
 
-        energy_use = energy_today - energy_use
+        if user_profile.weight is None:
+            return Response("User doesn't have completed profile")
 
-        serializer = StatusSerializer(data=dict(
-            energy_today=energy_today,
-            protein_today=protein_today,
-            carbohydrate_today=carbohydrate_today,
-            fat_today=fat_today,
-            fiber_today=fiber_today,
-            sugar_today=sugar_today,
-            salt_today=salt_today,
+        # noqa - Cautam toate activitatile pe care utilizatorul lea facut astazi
+        activity_journal_list_today = ActivityJournal.objects.filter(
+            user=self.request.user.id,
+            datetime__date=date.today(),
+        )
+
+        # noqa - Calculam energia totala cheltuita astazi
+        today_energy_used = 0
+        for activity_journal in activity_journal_list_today:
+            today_energy_used += activity_journal.activity.energy * activity_journal.duration * user_profile.weight
+
+        # noqa - Scadem energia cheltuita din energia consumata
+        today_energy -= today_energy_used
+
+        print('today_energy: ', today_energy)
+
+        # noqa - Gatim raspunsul
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=dict(
+            today_energy=today_energy,
+            today_protein=today_protein,
+            today_carbohydrate=today_carbohydrate,
+            today_fat=today_fat,
+            today_fiber=today_fiber,
+            today_sugar=today_sugar,
+            today_salt=today_salt,
         ))
 
         if not serializer.is_valid():
             return Response(serializer.errors)
 
-        return Response(serializer.data)
-
-
-
-
-        # for activity_journal in activity_journal_queryset:
-        #     energy_userd += activity_journal.activity.energy * activity_journal.duation * user.profile.weight
-        #
-        # energy_today = energy_today - energy_userd
-        #
-        #
-        # result = StatusSerializer(
-        #     energy_today=energy_today,
-        #     protein_today=protein_today,
-        #
-        # )
-        #
-        # return Response(result)
+        return Response(serializer.validated_data)

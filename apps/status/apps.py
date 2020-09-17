@@ -2,4 +2,5 @@ from django.apps import AppConfig
 
 
 class StatusConfig(AppConfig):
-    name = 'status'
+    name = 'apps.status'
+    verbose_name = 'Status'
