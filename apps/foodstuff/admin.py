@@ -1,0 +1,1 @@
+from apps.calorie_api.admin import FoodPortionAdmin, FoodCategoryAdmin, FoodAdmin, ActivityCategoryAdmin, Activity

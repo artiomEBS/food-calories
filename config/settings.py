@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'apps.journal.apps.JournalConfig',
     'apps.search.apps.SearchConfig',
     'apps.diary',
+    'apps.foodstuff',
 ]
 
 MIDDLEWARE = [

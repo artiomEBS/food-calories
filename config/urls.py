@@ -27,6 +27,7 @@ urlpatterns = [
     path('search/', include('apps.search.urls'), name='search'),
     path('status/', include('apps.status.urls'), name='user'),
     path('diary/', include('apps.diary.urls'), name='diary'),
+    path('foodstuff/', include('apps.foodstuff.urls'), name='foodstuff'),
     path('user/', include('apps.users.urls'), name='user'),
     path('', swagger_view, name='schema-swagger-ui'),
 ]
